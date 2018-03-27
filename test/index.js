@@ -134,6 +134,17 @@ describe("push", () => {
             "idle_99"
         ]);
     });
+
+    it("double on", () => {
+        var ws = {
+            send: m => {}
+        };
+
+        push.on(`test_111`, ws);
+        assert.throws(() => {
+            push.on(`test_111`, ws);
+        });
+    });
 });
 
-test.run();
+test.run(console.DEBUG);
