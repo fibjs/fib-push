@@ -73,11 +73,11 @@ describe("push", () => {
             send: m => r.push(m)
         };
 
-        let filter = function(d) {
+        let filter1 = function(d) {
             return d.a == 200;
         }
 
-        push.on("bbb", ws, new Date(), filter);
+        push.on("bbb", ws, new Date(), filter1);
         push.post("bbb", {
             a: 100,
             b: 200
@@ -94,6 +94,28 @@ describe("push", () => {
             a: 200,
             b: 300
         });
+
+        let filter2 = function(d) {
+            return d.b == 200;
+        }
+
+        push.on("ccc", ws, new Date(), filter2);
+        push.post("bbb", {
+            a: 100,
+            b: 200
+        });
+        assert.deepEqual(r.length, 1);
+
+        push.post("ccc", {
+            a: 300,
+            b: 200
+        });
+        assert.deepEqual(r.length, 2);
+        assert.deepEqual(JSON.parse(r[1]).data, {
+            a: 300,
+            b: 200
+        });
+
     });
 
     it("not post empty channel", () => {
