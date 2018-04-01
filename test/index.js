@@ -67,6 +67,35 @@ describe("push", () => {
         });
     });
 
+    it("post by filter", () => {
+        var r = [];
+        var ws = {
+            send: m => r.push(m)
+        };
+
+        let filter = function(d) {
+            return d.a == 200;
+        }
+
+        push.on("bbb", ws, new Date(), filter);
+        push.post("bbb", {
+            a: 100,
+            b: 200
+        });
+        assert.deepEqual(r.length, 0);
+
+        push.post("bbb", {
+            a: 200,
+            b: 300
+        });
+
+        assert.deepEqual(r.length, 1);
+        assert.deepEqual(JSON.parse(r[0]).data, {
+            a: 200,
+            b: 300
+        });
+    });
+
     it("not post empty channel", () => {
         push.post("aaa1", {
             a: 100,
