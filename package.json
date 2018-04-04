@@ -3,6 +3,9 @@
   "version": "1.0.1",
   "description": "",
   "main": "lib/index",
+  "scripts": {
+    "test": "fibjs ./test/index.js"
+  },
   "author": "",
   "license": "ISC"
 }
