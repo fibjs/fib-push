@@ -8,17 +8,22 @@ push.config({
     msg_limit: 10
 });
 
+function noop () {}
+
 describe("push", () => {
     it("on/off", () => {
         var ws = {
+            send: noop,
             value: 1024
         };
 
         var ws1 = {
+            send: noop,
             value: 1025
         };
 
         var ws2 = {
+            send: noop,
             value: 1025
         };
 
