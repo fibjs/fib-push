@@ -194,6 +194,48 @@ describe("push", () => {
         ]);
     });
 
+    it("lock/unlock", () => {
+        var ws = {
+            send: m => {}
+        };
+
+        push.post(`lock_test`, 1);
+        assert.property(push.status(), "lock_test");
+
+        for (var i = 0; i < 100; i++)
+            push.post(`lock_${i}`, 1);
+        assert.notProperty(push.status(), "lock_test");
+
+        push.lock("lock_test");
+        for (var i = 0; i < 100; i++)
+            push.post(`lock_${i}`, 1);
+        assert.property(push.status(), "lock_test");
+
+        push.unlock("lock_test");
+        assert.property(push.status(), "lock_test");
+        for (var i = 0; i < 100; i++)
+            push.post(`lock_${i}`, 1);
+        assert.notProperty(push.status(), "lock_test");
+
+        push.lock("lock_test");
+        assert.property(push.status(), "lock_test");
+
+        push.on(`lock_test`, ws);
+        for (var i = 0; i < 100; i++)
+            push.post(`lock_${i}`, 1);
+        assert.property(push.status(), "lock_test");
+
+        push.unlock("lock_test");
+        for (var i = 0; i < 100; i++)
+            push.post(`lock_${i}`, 1);
+        assert.property(push.status(), "lock_test");
+
+        ws.onclose();
+        for (var i = 0; i < 100; i++)
+            push.post(`lock_${i}`, 1);
+        assert.notProperty(push.status(), "lock_test");
+    });
+
     it("double on", () => {
         var ws = {
             send: m => {}
