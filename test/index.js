@@ -1,6 +1,7 @@
 const test = require('test');
 test.setup();
 
+const coroutine = require('coroutine');
 const push = require('..');
 
 push.config({
@@ -245,6 +246,55 @@ describe("push", () => {
         assert.throws(() => {
             push.on(`test_111`, ws);
         });
+    });
+
+    it("post empty message by different case", () => {
+        var r = [];
+        var ws = {
+            send: m => r.push(m)
+        };
+
+        push.on("aaa3", ws, 0);
+        assert.equal(r.length, 1);
+        assert.strictEqual(JSON.parse(r[0]).data, undefined);
+        assert.property(JSON.parse(r[0]), "timestamp");
+        push.off("aaa3", ws);
+
+        var s = JSON.parse(r[0]).timestamp;
+
+        r = [];
+        var t = Date.now();
+        for (var i = 0; i < 5; i++) {
+            coroutine.sleep(1);
+            push.post("aaa3", {
+                a: i
+            });
+        }
+            
+        push.on("aaa3", ws, t);
+        assert.equal(r.length, 5);
+        assert.equal(JSON.parse(r[0]).timestamp > s, true);
+        push.off("aaa3", ws);
+
+        r = [];
+        for (var i = 0; i < 15; i++) {
+            coroutine.sleep(1);
+            push.post("aaa3", {
+                a: i
+            });
+        }
+        push.on("aaa3", ws, t);
+        assert.equal(r.length, 11);
+        assert.strictEqual(JSON.parse(r[0]).data, undefined);
+        assert.property(JSON.parse(r[0]), "timestamp");
+        assert.equal(JSON.parse(r[0]).timestamp, JSON.parse(r[1]).timestamp);
+        push.off("aaa3", ws);
+
+        coroutine.sleep(1);
+        r = [];
+        t = Date.now();
+        push.on("aaa3", ws, t);
+        assert.equal(r, 0);
     });
 });
 
