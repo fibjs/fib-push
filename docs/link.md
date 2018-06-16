@@ -2,27 +2,6 @@
 
 Link is one simple linkedList.
 
-```typescript
-interface LinkedNode<T = any> {
-    data: T;
-    next: LinkedNode|undefined;
-    prev: LinkedNode|undefined;
-}
-
-class Link<DT = any> {
-    private _head: LinkedNode<DT>|undefined;
-    private _tail: LinkedNode<DT>|undefined;
-    private _count: number;
-
-    head(): LinkedNode<DT>;
-    tail(): LinkedNode<DT>;
-    addHead(data: any): LinkedNode<DT>;
-    addTail(data: any): LinkedNode<DT>;
-    remove(node: LinkedNode<DT>): number;
-    count(): number;
-}
-```
-
 #### Sample
 
 ```javascript
