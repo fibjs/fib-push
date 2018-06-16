@@ -3,9 +3,27 @@
   "version": "1.2.2",
   "description": "",
   "main": "lib/index",
+  "types": "@types/index.d.ts",
   "scripts": {
-    "test": "fibjs ./test/index.js"
+    "build": "fibjs ./build.js",
+    "test": "fibjs ./test/index.js",
+    "ci": "fibjs ./test/index.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@fibjs/ci": "^2.0.0",
+    "@types/fibjs": "github:fibjs/fib-types#v1.0.6",
+    "fib-typify": "^0.1.2"
+  },
+  "ci": {
+    "type": "travis",
+    "version": [
+      "0.21.0",
+      "0.22.0",
+      "0.23.0",
+      "0.24.0",
+      "0.25.0"
+    ]
+  }
 }
