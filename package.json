@@ -5,16 +5,16 @@
   "main": "lib/index",
   "types": "@types/index.d.ts",
   "scripts": {
-    "build": "fibjs ./build.js",
+    "build": "fib-typify src -o lib -c .typify.json",
     "test": "fibjs ./test/index.js",
     "ci": "fibjs ./test/index.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@fibjs/ci": "^2.0.0",
-    "@types/fibjs": "github:fibjs/fib-types#v1.0.6",
-    "fib-typify": "^0.1.2"
+    "@fibjs/ci": "^2.1.0",
+    "@types/fibjs": "^0.26.0",
+    "fib-typify": "^0.3.0"
   },
   "ci": {
     "type": "travis",
@@ -23,7 +23,9 @@
       "0.22.0",
       "0.23.0",
       "0.24.0",
-      "0.25.0"
+      "0.25.0",
+      "0.26.0",
+      "0.26.1"
     ]
   }
 }
