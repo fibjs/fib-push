@@ -6,7 +6,7 @@ declare module "fib-push" {
          * link channel and connection_node.
          * 
          * find channel by channel_name, check if `ws._ons` exists,
-         * then call `channel.off(ws._ons)`.
+         * then call `channel.on(ws._ons)`.
          */
         export function on(channel_name: string, ws: WebSocketLike, timestamp: number, filter?: DataFilterFunction): void
         /**
