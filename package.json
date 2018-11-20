@@ -5,9 +5,9 @@
   "main": "lib/index",
   "types": "@types/index.d.ts",
   "scripts": {
-    "build": "fib-typify src -o lib -c .typify.json",
+    "build": "fib-typify src -o lib",
     "test": "fibjs ./test/index.js",
-    "ci": "fibjs ./test/index.js"
+    "ci": "npm run build && npm run test"
   },
   "author": "",
   "license": "ISC",

@@ -1,5 +1,8 @@
 ## fib-push
 
+[![Build Status](https://travis-ci.org/fibjs/fib-push.svg)](https://travis-ci.org/fibjs/fib-push)
+[![NPM version](https://img.shields.io/npm/v/fib-push.svg)](https://www.npmjs.org/package/fib-push)
+
 `fib-push` is one global service in a fibjs runtime, which provides duplex communication based on **websocket-like** connection, and manage end-2-end connection & **message queue** with **Channel**. One global service is enough in most cases, so we **don't** support multiple instances of `fib-push` at now.
 
 `fib-push` has so less code that you could learn about its mechanism and usage just by reading source code :)
