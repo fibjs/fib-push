@@ -108,17 +108,21 @@ declare namespace FibPushNS {
          * notice that the 1st callback param is string, one json-format
          * data payload
          */
-        send?(json: JsonfiedMessage): void;
+        send?: {
+            (json: JsonfiedMessage): void
+        };
 
         /**
          * callback when websoket-like object close.
          */
-        onclose?(): void;
+        onclose?: Function;
 
         /**
          * registered channel
          */
-        _ons?: { [registeredConnectedChannelNodeName: string]: ConnectedChannelNode }
+        _ons?: {
+            [registeredConnectedChannelNodeName: string]: ConnectedChannelNode
+        }
     }
     interface WsConnection extends WebSocketLike { }
     /* websocket like :end */
