@@ -1,7 +1,13 @@
 
-v1.4.0 / 2019-01-14
+v1.4.1 / 2019-01-14
 ==================
 
+  * typo fix.
+
+v1.4.0 / 2019-01-14
+===================
+
+  * Release v1.4.0
   * use FibPushNS as global namespace.
   * add lib/* to .gitignore, add npm/travis-ci badget.
   * Merge pull request #7 from richardo2016/master
