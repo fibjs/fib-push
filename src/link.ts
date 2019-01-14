@@ -1,14 +1,12 @@
-/// <reference path="../@types/index.d.ts" />
-
 export default function<DT = any> () {
-    let _head: LinkedNode<DT>, _tail: LinkedNode<DT>;
+    let _head: FibPushNS.LinkedNode<DT>, _tail: FibPushNS.LinkedNode<DT>;
     let _count: number = 0;
 
-    this.head = (): LinkedNode<DT> => {
+    this.head = (): FibPushNS.LinkedNode<DT> => {
         return _head;
     }
 
-    this.tail = (): LinkedNode<DT> => {
+    this.tail = (): FibPushNS.LinkedNode<DT> => {
         return _tail;
     }
 
@@ -16,8 +14,8 @@ export default function<DT = any> () {
         return _count;
     }
 
-    this.addHead = (data: DT): LinkedNode<DT> => {
-        const node: LinkedNode<DT> = {
+    this.addHead = (data: DT): FibPushNS.LinkedNode<DT> => {
+        const node: FibPushNS.LinkedNode<DT> = {
             next: _head,
             data: data
         };
@@ -34,8 +32,8 @@ export default function<DT = any> () {
         return node;
     };
 
-    this.addTail = (data: DT): LinkedNode<DT> => {
-        const node: LinkedNode<DT> = {
+    this.addTail = (data: DT): FibPushNS.LinkedNode<DT> => {
+        const node: FibPushNS.LinkedNode<DT> = {
             prev: _tail,
             data: data
         };
@@ -52,7 +50,7 @@ export default function<DT = any> () {
         return node;
     };
 
-    this.remove = (node: LinkedNode<DT>): number => {
+    this.remove = (node: FibPushNS.LinkedNode<DT>): number => {
         if (_head === node)
             _head = node.next;
         else
