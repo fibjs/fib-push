@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@fibjs/ci": "^2.1.0",
-    "@types/fibjs": "^0.26.5",
-    "fib-typify": "^0.5.1"
+    "@fibjs/ci": "^2.3.0",
+    "@fibjs/types": "^0.27.1",
+    "fib-typify": "^0.6.0"
   },
   "ci": {
     "type": "travis, appveyor",
@@ -25,7 +25,8 @@
       "0.24.0",
       "0.25.0",
       "0.26.0",
-      "0.26.1"
+      "0.26.1",
+      "0.27.0"
     ]
   }
 }

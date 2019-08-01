@@ -1,6 +1,6 @@
 const fpush = require('../');
 
-ffpush.config({
+fpush.config({
     idle_limit: 10,
     msg_limit: 10
 });
