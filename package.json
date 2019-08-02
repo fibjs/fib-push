@@ -1,8 +1,8 @@
 {
   "name": "fib-push",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "",
-  "main": "lib/index",
+  "main": "lib",
   "types": "@types/index.d.ts",
   "scripts": {
     "build": "fib-typify src -o lib",
