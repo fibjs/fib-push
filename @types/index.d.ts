@@ -1,11 +1,12 @@
 declare namespace FibPushNS {
     type MsgPayloadDataType = any;
-    type DataFilterFunction = Function;
+    interface DataFilterFunction {
+        (input: any): boolean
+    }
 
     /* channel :start */
     type ChannelNameType = string;
     type ChannelTimestampType = Date | number;
-    type ChannelEventFilter = DataFilterFunction;
     interface ChannelHash { [chName: string]: Channel }
 
     interface Channel {
@@ -13,7 +14,7 @@ declare namespace FibPushNS {
         /**
          * **connection pool** of this channel
          */
-        conns: Link<WsConnection>;
+        conns: Link<WebSocketLike>;
         /**
          * **message queue** of this channel
          */
@@ -28,7 +29,7 @@ declare namespace FibPushNS {
         /**
          * remove WebSocketLike(s) object from channel
          */
-        off(node: LinkedNode<WsConnection>): void
+        off(node: LinkedNode<WebSocketLike>): void
         /**
          * transform data to Jsonfied FibPushMessage Object, add 
          * jsonified-message with time and original data to 
@@ -38,7 +39,7 @@ declare namespace FibPushNS {
          */
         post(data: MsgPayloadDataType[] | MsgPayloadDataType): void
         // get connection information as one channel_name-indexed dict, equivlant to `channel.conns.toJSON()`
-        status(): WsConnection[]
+        status(): WebSocketLike[]
 
         /**
          * lock channel to prevent data input
@@ -52,13 +53,13 @@ declare namespace FibPushNS {
     interface ConnectedChannelNodeHash {
         [channelName: string]: ConnectedChannelNode
     }
-    interface ConnectedChannelLink extends Link<WsConnection> {}
-    interface ConnectedChannelNode extends LinkedNode<WsConnection> {
+    interface ConnectedChannelLink extends Link<WebSocketLike> {}
+    interface ConnectedChannelNode extends LinkedNode<WebSocketLike> {
         /**
          * filter data in message.data before this 
          * websocket-like object call `send(message.data.json)`
          */
-        filter?: DataFilterFunction
+        filter: DataFilterFunction
     }
 
     type IdleChannelLink = Link<Channel>
@@ -124,7 +125,6 @@ declare namespace FibPushNS {
             [registeredConnectedChannelNodeName: string]: ConnectedChannelNode
         }
     }
-    interface WsConnection extends WebSocketLike { }
     /* websocket like :end */
 
     /* linked node :start */
@@ -149,7 +149,7 @@ declare namespace FibPushNS {
     }
     /* linked node :end */
 
-    type FibPushStatus = { [channelName: string]: WsConnection[] }
+    type FibPushStatus = { [channelName: string]: WebSocketLike[] }
 
     interface FibPushOptions {
         /**
@@ -175,7 +175,7 @@ declare namespace FibPushNS {
          * find channel by channel_name, check if `ws._ons` exists,
          * then call `channel.on(ws._ons)`.
          */
-        on(channel_name: string, ws: FibPushNS.WebSocketLike, timestamp: number, filter?: FibPushNS.DataFilterFunction): void
+        on(channel_name: string, ws: FibPushNS.WebSocketLike, timestamp: number, filter?: DataFilterFunction): void
         /**
          * unlink channel and connection_node.
          * 
@@ -189,7 +189,17 @@ declare namespace FibPushNS {
          * 
          * find channel by channel_name, then call `channel.post(data)`
          */ 
-        post(channel_name: string, data: FibPushNS.MsgPayloadDataType): void
+        post(channel_name: string, data?: FibPushNS.MsgPayloadDataType): void
+        /**
+         * @description lock one channel
+         * @param channel_name channel to lock
+         */
+        lock(channel_name: string): void
+        /**
+         * @description unlock one channel
+         * @param channel_name channel to unlock
+         */
+        unlock(channel_name: string): void
         /**
          * get all status of channels and response with hash.
          */

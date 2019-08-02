@@ -18,9 +18,12 @@ function check_websocket_like_obj(ws: FibPushNS.WebSocketLike) {
  * 
  * @class FibPushNS.Channel 
  */
-function channel(name: string) {
-    const self: FibPushNS.Channel = this;
-    const conns: FibPushNS.ConnectedChannelLink = new Link<FibPushNS.WsConnection>();
+function channel(
+    this: FibPushNS.Channel,
+    name: string
+) {
+    const self = this;
+    const conns: FibPushNS.ConnectedChannelLink = new Link<FibPushNS.WebSocketLike>();
     const msgs = new Link<FibPushNS.FibPushMessage>();
     let idle_node: FibPushNS.LinkedNode<FibPushNS.Channel>;
     const start_timestamp = new Date();
@@ -30,7 +33,7 @@ function channel(name: string) {
     function toIdle(): void {
         idle_node = idles.addTail(self);
         if (idles.count() > idle_limit) {
-            var head = idles.head();
+            const head = idles.head();
             delete chs[head.data.name];
             idles.remove(head);
         }
@@ -46,16 +49,14 @@ function channel(name: string) {
     toIdle();
 
     self.name = name;
-    self.on = (
-        ws: FibPushNS.WebSocketLike, tt: FibPushNS.ChannelTimestampType, filter?: FibPushNS.ChannelEventFilter
-    ): FibPushNS.ConnectedChannelNode => {
+    self.on = (ws, tt, filter?) => {
         check_websocket_like_obj(ws);
 
         active();
 
         const timestamp = new Date(tt as any);
 
-        var m: FibPushNS.LinkedNode<FibPushNS.FibPushMessage> = msgs.head();
+        let m = <FibPushNS.LinkedNode<FibPushNS.FibPushMessage>>msgs.head();
         if (m != undefined) {
             if (m.data.timestamp.getTime() > timestamp.getTime()) {
                 if (timestamp.getTime() < start_timestamp.getTime()) {
@@ -87,12 +88,12 @@ function channel(name: string) {
                 }));
         }
 
-        let node: FibPushNS.ConnectedChannelNode = conns.addTail(ws);
+        const node = <FibPushNS.ConnectedChannelNode>conns.addTail(ws);
         node.filter = filter;
         return node;
     };
 
-    self.off = (node: FibPushNS.ConnectedChannelNode): void => {
+    self.off = (node): void => {
         if (conns.remove(node) === 0 && locked === 0)
             toIdle();
     };
@@ -101,8 +102,8 @@ function channel(name: string) {
         if (Array.isArray(data))
             return data.forEach(d => post(d));
 
-        var timestamp: FibPushNS.ChannelTimestampType = new Date();
-        var json: FibPushNS.JsonfiedMessage = JSON.stringify({
+        const timestamp: FibPushNS.ChannelTimestampType = new Date();
+        const json: FibPushNS.JsonfiedMessage = JSON.stringify({
             timestamp: timestamp,
             ch: name,
             data: data
@@ -119,11 +120,11 @@ function channel(name: string) {
             miss = true
         }
 
-        var node: FibPushNS.ConnectedChannelNode = conns.head();
+        let node = <FibPushNS.ConnectedChannelNode>conns.head();
         while (node !== undefined) {
             if (!node.filter || node.filter(data))
                 node.data.send(json);
-            node = node.next;
+            node = <FibPushNS.ConnectedChannelNode>node.next;
         }
     };
 
@@ -139,22 +140,20 @@ function channel(name: string) {
             toIdle();
     }
 
-    self.status = (): FibPushNS.WsConnection[] => {
+    self.status = (): FibPushNS.WebSocketLike[] => {
         return conns.toJSON();
     }
 }
 
-export const on = (
-    ch: FibPushNS.ChannelNameType|FibPushNS.ChannelNameType[], ws: FibPushNS.WebSocketLike, timestamp: FibPushNS.ChannelTimestampType, filter?: FibPushNS.ChannelEventFilter
-): void => {
+export const on: FibPushNS.ExportModule['on'] = (ch, ws, timestamp, filter?) => {
     if (Array.isArray(ch))
         return ch.forEach(c => on(c, ws, timestamp, filter));
 
-    var ons = ws._ons;
+    let ons = ws._ons;
     if (ons === undefined) {
         ws._ons = ons = {};
         ws.onclose = () => {
-            for (var ch in ons)
+            for (let ch in ons)
                 off(ch, ws);
         }
     }
@@ -162,56 +161,56 @@ export const on = (
     if (ons[ch] !== undefined)
         throw new Error('double on channel ' + ch);
 
-    var cho = chs[ch];
+    let cho = chs[ch];
     if (cho === undefined)
         chs[ch] = cho = new channel(ch);
 
     ons[ch] = cho.on(ws, timestamp, filter);
 };
 
-export const off = (ch, ws): void => {
+export const off: FibPushNS.ExportModule['off'] = (ch, ws) => {
     if (Array.isArray(ch))
         return ch.forEach(c => off(c, ws));
 
-    var ons = ws._ons;
+    const ons = ws._ons;
     if (ons !== undefined && ons[ch] !== undefined) {
         chs[ch].off(ons[ch]);
         delete ons[ch];
     }
 };
 
-export const post = (ch, data?: any): void => {
-    var cho = chs[ch];
+export const post: FibPushNS.ExportModule['post'] = (ch, data) => {
+    let cho = chs[ch];
     if (cho === undefined)
         chs[ch] = cho = new channel(ch);
 
     cho.post(data);
 };
 
-export const lock = (ch: string): void => {
-    var cho = chs[ch];
+export const lock: FibPushNS.ExportModule['lock'] = (ch) => {
+    let cho = chs[ch];
     if (cho === undefined)
         chs[ch] = cho = new channel(ch);
 
     cho.lock();
 };
 
-export const unlock = (ch: string): void => {
-    var cho = chs[ch];
+export const unlock: FibPushNS.ExportModule['unlock'] = (ch) => {
+    let cho = chs[ch];
     if (cho === undefined)
         chs[ch] = cho = new channel(ch);
 
     cho.unlock();
 };
 
-export const status = (): FibPushNS.FibPushStatus => {
-    var r: FibPushNS.FibPushStatus = {};
+export const status: FibPushNS.ExportModule['status'] = () => {
+    const r = <FibPushNS.FibPushStatus>{};
     for (let ch in chs)
         r[ch] = chs[ch].status();
     return r;
 };
 
-export const config = (opts: FibPushNS.FibPushOptions) => {
+export const config: FibPushNS.ExportModule['config'] = (opts) => {
     idle_limit = opts.idle_limit || idle_limit;
     msg_limit = opts.msg_limit || msg_limit;
 }

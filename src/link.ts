@@ -1,20 +1,15 @@
-export default function<DT = any> () {
-    let _head: FibPushNS.LinkedNode<DT>, _tail: FibPushNS.LinkedNode<DT>;
+export default function<DT = any> (
+    this: FibPushNS.Link
+) {
+    let _head: FibPushNS.LinkedNode<DT>,
+        _tail: FibPushNS.LinkedNode<DT>;
     let _count: number = 0;
 
-    this.head = (): FibPushNS.LinkedNode<DT> => {
-        return _head;
-    }
-
-    this.tail = (): FibPushNS.LinkedNode<DT> => {
-        return _tail;
-    }
-
-    this.count = (): number => {
-        return _count;
-    }
-
-    this.addHead = (data: DT): FibPushNS.LinkedNode<DT> => {
+    this.head = () => _head;
+    this.tail = () => _tail;
+    this.count = (): number => _count;
+    
+    this.addHead = (data: DT) => {
         const node: FibPushNS.LinkedNode<DT> = {
             next: _head,
             data: data
@@ -32,7 +27,7 @@ export default function<DT = any> () {
         return node;
     };
 
-    this.addTail = (data: DT): FibPushNS.LinkedNode<DT> => {
+    this.addTail = (data: DT) => {
         const node: FibPushNS.LinkedNode<DT> = {
             prev: _tail,
             data: data
@@ -67,9 +62,9 @@ export default function<DT = any> () {
     };
 
     this.toJSON = (): DT[] => {
-        var a = [];
+        const a = [];
 
-        var node = _head;
+        let node = _head;
         while (node !== undefined) {
             a.push(node.data);
             node = node.next;

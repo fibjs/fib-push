@@ -14,7 +14,6 @@
 - `Channel` is the pivot structure in `fib-push`.
 - There is one global `idles` variable for recording idle channel, when new idle channel added as tail, the head one would be delete and removed.
 - All message transmission is on json-encoded-format.
-- `WebSocketLike` -> `WsConnection`.
 
 ### Usage
 
