@@ -5,11 +5,11 @@ const idles: FibPushNS.IdleChannelLink = new Link<FibPushNS.Channel>();
 let idle_limit: number = 100;
 let msg_limit: number = 100;
 
-function noop_send() {}
+function noOp() {}
 
 function check_websocket_like_obj(ws: FibPushNS.WebSocketLike) {
     if (typeof ws.send !== 'function') {
-        ws.send = noop_send;
+        ws.send = noOp;
         console.warn(`invalid websoket-like object, it should always have function-type 'send' field, it has been automaticlly correct by empty function`)
     }
 }
@@ -76,7 +76,7 @@ function channel(
                 m = m.next;
 
             while (m !== undefined) {
-                if (!filter || filter(m.data.data))
+                if (typeof filter !== 'function' || filter(m.data.data))
                     ws.send(m.data.json);
                 m = m.next;
             }
@@ -122,7 +122,7 @@ function channel(
 
         let node = <FibPushNS.ConnectedChannelNode>conns.head();
         while (node !== undefined) {
-            if (!node.filter || node.filter(data))
+            if (typeof node.filter !== 'function' || node.filter(data))
                 node.data.send(json);
             node = <FibPushNS.ConnectedChannelNode>node.next;
         }
