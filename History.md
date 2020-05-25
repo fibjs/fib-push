@@ -1,7 +1,14 @@
 
-v1.4.2 / 2019-08-02
+v1.4.3 / 2020-05-25
 ==================
 
+  * chore: upgrade fib-typify
+  * chore: robust change.
+
+v1.4.2 / 2019-08-02
+===================
+
+  * Release v1.4.2
   * simplify typo
   * upgrade dependencies.
 
