@@ -1,8 +1,23 @@
-export default function<DT = any> (
-    this: FibPushNS.Link
-) {
-    let _head: FibPushNS.LinkedNode<DT>,
-        _tail: FibPushNS.LinkedNode<DT>;
+export interface LinkedNode<T = any> {
+    data: T;
+    next?: LinkedNode;
+    prev?: LinkedNode;
+}
+
+export default interface Link<DT> {
+    (): void
+    head(): LinkedNode<DT>;
+    tail(): LinkedNode<DT>;
+    count(): number;
+    addHead(data: any): LinkedNode<DT>;
+    addTail(data: any): LinkedNode<DT>;
+    remove(node: LinkedNode<DT>): number;
+    toJSON(): DT[];
+}
+
+export default function Link<DT = any>(this: Link<DT>) {
+    let _head: LinkedNode<DT>,
+        _tail: LinkedNode<DT>;
     let _count: number = 0;
 
     this.head = () => _head;
@@ -10,7 +25,7 @@ export default function<DT = any> (
     this.count = (): number => _count;
     
     this.addHead = (data: DT) => {
-        const node: FibPushNS.LinkedNode<DT> = {
+        const node: LinkedNode<DT> = {
             next: _head,
             data: data
         };
@@ -28,7 +43,7 @@ export default function<DT = any> (
     };
 
     this.addTail = (data: DT) => {
-        const node: FibPushNS.LinkedNode<DT> = {
+        const node: LinkedNode<DT> = {
             prev: _tail,
             data: data
         };
@@ -45,7 +60,7 @@ export default function<DT = any> (
         return node;
     };
 
-    this.remove = (node: FibPushNS.LinkedNode<DT>): number => {
+    this.remove = (node: LinkedNode<DT>): number => {
         if (_head === node)
             _head = node.next;
         else

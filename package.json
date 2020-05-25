@@ -1,20 +1,24 @@
 {
   "name": "fib-push",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "",
   "main": "lib",
-  "types": "@types/index.d.ts",
+  "types": "typings/index.d.ts",
   "scripts": {
-    "build": "fib-typify src -o lib",
+    "build": "ftsc src/* --outDir ./lib",
     "test": "fibjs ./test/index.js",
     "ci": "npm run build && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fibjs/fib-push.git"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@fibjs/ci": "^2.3.0",
     "@fibjs/types": "^0.27.1",
-    "fib-typify": "^0.6.0"
+    "fib-typify": "^0.8.3"
   },
   "ci": {
     "type": "travis, appveyor",
@@ -26,7 +30,10 @@
       "0.25.0",
       "0.26.0",
       "0.26.1",
-      "0.27.0"
+      "0.27.0",
+      "0.28.0",
+      "0.29.0",
+      "0.30.0"
     ]
   }
 }

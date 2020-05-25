@@ -1,5 +1,7 @@
 {
     "compilerOptions": {
-        "noImplicitUseStrict": true
+        "noImplicitUseStrict": true,
+        "declaration": true,
+        "declarationDir": "./typings"
     }
 }
